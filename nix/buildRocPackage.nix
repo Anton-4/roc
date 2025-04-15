@@ -24,6 +24,8 @@ let
       function prefetch () {
         local searchPath=$1
         local skipApp=$2 # to skip any code gen app files in dependencies
+
+        echo "skipApp: $skipApp"
         
         # Set default value for skipApp if not provided
         if [ -z "$skipApp" ]; then
@@ -36,6 +38,7 @@ let
         if [ "$skipApp" = true ]; then
           # Find files containing app declarations
           local appFiles=$(rg -l '^\s*app\s*\[' -IN $searchPath)
+          echo "appFiles $appFiles"
           
           # If app files were found, exclude them from search
           if [ -n "$appFiles" ]; then
