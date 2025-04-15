@@ -92,12 +92,12 @@ let
 
             # Recursively fetch dependencies of dependencies
             # Pass the skipApp parameter to recursive calls
-            prefetch "$outputPackagePath" "$skipApp"
+            prefetch "$outputPackagePath" true
           fi
         done
       }
 
-      prefetch ${src} true
+      prefetch ${src} false
 
       if [ -d "$out/roc/packages" ]; then
         echo "Successfully prefetched packages:"
