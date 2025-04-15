@@ -23,7 +23,7 @@ let
       # so they're available during roc build stage
       function prefetch () {
         local searchPath=$1
-        local skipApp=$2 # to skip any example app files in dependencies
+        local skipApp=$2 # to skip any code gen app files in dependencies
         
         # Set default value for skipApp if not provided
         if [ -z "$skipApp" ]; then
@@ -43,7 +43,8 @@ let
             for file in $appFiles; do
               excludeArgs="$excludeArgs -g !$file"
             done
-            local getDependenciesCommand="rg -o '$dependenciesRegexp' -IN $excludeArgs $searchPath"
+            echo "CORRECT BRANCH"
+            local getDependenciesCommand="rg -o '$dependenciesRegexp' $excludeArgs -IN  $searchPath"
           else
             local getDependenciesCommand="rg -o '$dependenciesRegexp' -IN $searchPath"
           fi
