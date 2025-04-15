@@ -44,7 +44,9 @@ let
           if [ -n "$appFiles" ]; then
             local excludeArgs=""
             for file in $appFiles; do
-              excludeArgs="$excludeArgs -g !$file"
+              # Convert to relative path from searchPath
+              local relPath=$(realpath --relative-to="$searchPath" "$file")
+              excludeArgs="$excludeArgs -g !$relPath"
             done
             echo "CORRECT BRANCH"
             local getDependenciesCommand="rg -o '$dependenciesRegexp' $excludeArgs -IN  $searchPath"
