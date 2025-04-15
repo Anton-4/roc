@@ -49,12 +49,10 @@ let
             mkdir -p "$outputPackagePath"
 
             # Download dependency
-            set -e
             if ! (wget -P "$outputPackagePath" "$url" 2>/tmp/wget_error); then
               echo "WARNING: Failed to download $url: $(cat /tmp/wget_error)"
-              continue 
+              exit 1
             fi
-            set -e
 
             # Unpack dependency
             if [[ $url == *.br ]]; then
