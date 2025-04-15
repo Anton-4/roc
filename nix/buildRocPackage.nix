@@ -23,9 +23,29 @@ let
       # so they're available during roc build stage
       function prefetch () {
         local searchPath=$1
+        local skipApp=${2:-false} # to skip any example app files in dependencies
 
         local dependenciesRegexp='https://[^"]*tar.br|https://[^"]*tar.gz'
-        local getDependenciesCommand="rg -o '$dependenciesRegexp' -IN $searchPath"
+        
+        # If skipApp is true, exclude files containing app declarations
+        if [ "$skipApp" = true ]; then
+          # Find files containing app declarations
+          local appFiles=$(rg -l '^\s*app\s*\[' -IN $searchPath)
+          
+          # If app files were found, exclude them from search
+          if [ -n "$appFiles" ]; then
+            local excludeArgs=""
+            for file in $appFiles; do
+              excludeArgs="$excludeArgs -g !$file"
+            done
+            local getDependenciesCommand="rg -o '$dependenciesRegexp' -IN $excludeArgs $searchPath"
+          else
+            local getDependenciesCommand="rg -o '$dependenciesRegexp' -IN $searchPath"
+          fi
+        else
+          local getDependenciesCommand="rg -o '$dependenciesRegexp' -IN $searchPath"
+        fi
+        
         local depsUrlsList=$(eval "$getDependenciesCommand")
 
         if [ -z "$depsUrlsList" ]; then
@@ -66,12 +86,13 @@ let
             rm "$outputPackagePath"/*tar*
 
             # Recursively fetch dependencies of dependencies
-            prefetch "$outputPackagePath"
+            # Pass the skipApp parameter to recursive calls
+            prefetch "$outputPackagePath" "$skipApp"
           fi
         done
       }
 
-      prefetch ${src}
+      prefetch ${src} true
 
       if [ -d "$out/roc/packages" ]; then
         echo "Successfully prefetched packages:"
