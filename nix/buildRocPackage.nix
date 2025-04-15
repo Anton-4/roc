@@ -23,7 +23,12 @@ let
       # so they're available during roc build stage
       function prefetch () {
         local searchPath=$1
-        local skipApp=${2:-false} # to skip any example app files in dependencies
+        local skipApp=$2 # to skip any example app files in dependencies
+        
+        # Set default value for skipApp if not provided
+        if [ -z "$skipApp" ]; then
+          skipApp=false
+        fi
 
         local dependenciesRegexp='https://[^"]*tar.br|https://[^"]*tar.gz'
         
