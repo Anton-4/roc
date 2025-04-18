@@ -17,6 +17,8 @@ let
     nativeBuildInputs = with pkgs; [ gnutar brotli ripgrep wget cacert ];
 
     buildPhase = ''
+      set -exo pipefail
+
       declare -A visitedUrls
 
       # function that recursively prefetches roc dependencies
@@ -60,6 +62,7 @@ let
           local depsUrlsList=$(rg -o "$dependenciesRegexp" -IN  $searchPath)
         fi
 
+        depsUrlsList=$(uniq $depsUrlsList)
         echo "depsUrlsList: $depsUrlsList"
 
         if [ -z "$depsUrlsList" ]; then
