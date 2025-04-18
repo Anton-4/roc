@@ -52,14 +52,14 @@ let
               filesWithUrls=$(echo "$filesWithUrls" | grep -vxF "$appFullPath")
             done
             depsUrlsList=$(rg -o '$dependenciesRegexp' -IN  $filesWithUrls)
-            
-            echo "depsUrlsList: $depsUrlsList"
           else
             local depsUrlsList=$(rg -o '$dependenciesRegexp' -IN  $searchPath)
           fi
         else
           local depsUrlsList=$(rg -o '$dependenciesRegexp' -IN  $searchPath)
         fi
+
+        echo "depsUrlsList: $depsUrlsList"
 
         if [ -z "$depsUrlsList" ]; then
           echo "No dependency URLs need to be downloaded."
