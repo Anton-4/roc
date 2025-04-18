@@ -28,7 +28,6 @@ let
         local skipApp=$2 # to skip any code gen app files in dependencies
 
         echo "Searching for deps in $searchPath"
-        echo "skipApp: $skipApp"
         
         # Set default value for skipApp if not provided
         if [ -z "$skipApp" ]; then
@@ -45,8 +44,6 @@ let
           
           # If app files were found, exclude them from search
           if [ -n "$appFiles" ]; then
-            echo "CORRECT BRANCH"
-
             local filesWithUrls=$(rg -l "$dependenciesRegexp" -IN  $searchPath)
 
             for appFile in $appFiles; do
