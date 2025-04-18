@@ -49,7 +49,7 @@ let
               excludeArgs="$excludeArgs -g !$relPath"
             done
             echo "CORRECT BRANCH"
-            local getDependenciesCommand="rg -o '$dependenciesRegexp' $excludeArgs -IN  $searchPath"
+            local getDependenciesCommand="rg -o '$dependenciesRegexp' -IN  $searchPath"
             echo "getDepsCommand: $getDependenciesCommand"
           else
             local getDependenciesCommand="rg -o '$dependenciesRegexp' -IN $searchPath"
