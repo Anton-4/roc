@@ -42,23 +42,25 @@ let
           
           # If app files were found, exclude them from search
           if [ -n "$appFiles" ]; then
-            local excludeArgs=""
-            for file in $appFiles; do
-              # Convert to relative path from searchPath
-              local relPath=$(realpath --relative-to="$searchPath" "$file")
-              excludeArgs="$excludeArgs -g !$relPath"
-            done
             echo "CORRECT BRANCH"
-            local getDependenciesCommand="rg -o '$dependenciesRegexp' -IN  $searchPath"
-            echo "getDepsCommand: $getDependenciesCommand"
+
+            local filesWithUrls=$(rg -l "$dependenciesRegexp" -IN  $searchPath)
+
+            for appFile in $appFiles; do
+              local appFullPath=$(realpath "$appFile")
+              # Remove appFullPath from depsUrlsList
+              filesWithUrls=$(echo "$filesWithUrls" | grep -vxF "$appFullPath")
+            done
+            # Optionally, trim trailing space
+            depsUrlsList=$(rg -o '$dependenciesRegexp' -IN  $filesWithUrls)
+            
+            echo "depsUrlsList: $depsUrlsList"
           else
-            local getDependenciesCommand="rg -o '$dependenciesRegexp' -IN $searchPath"
+            local depsUrlsList=$(rg -o '$dependenciesRegexp' -IN  $searchPath)
           fi
         else
-          local getDependenciesCommand="rg -o '$dependenciesRegexp' -IN $searchPath"
+          local depsUrlsList=$(rg -o '$dependenciesRegexp' -IN  $searchPath)
         fi
-        
-        local depsUrlsList=$(eval "$getDependenciesCommand")
 
         if [ -z "$depsUrlsList" ]; then
           echo "Executed: $getDependenciesCommand"
