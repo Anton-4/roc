@@ -52,12 +52,12 @@ let
               # Remove appFullPath from depsUrlsList
               filesWithUrls=$(echo "$filesWithUrls" | grep -vxF "$appFullPath")
             done
-            depsUrlsList=$(rg -o '$dependenciesRegexp' -IN  $filesWithUrls)
+            local depsUrlsList=$(rg -o "$dependenciesRegexp" -IN  $filesWithUrls)
           else
-            local depsUrlsList=$(rg -o '$dependenciesRegexp' -IN  $searchPath)
+            local depsUrlsList=$(rg -o "$dependenciesRegexp" -IN  $searchPath)
           fi
         else
-          local depsUrlsList=$(rg -o '$dependenciesRegexp' -IN  $searchPath)
+          local depsUrlsList=$(rg -o "$dependenciesRegexp" -IN  $searchPath)
         fi
 
         echo "depsUrlsList: $depsUrlsList"
