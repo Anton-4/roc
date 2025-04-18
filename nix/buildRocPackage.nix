@@ -25,6 +25,7 @@ let
         local searchPath=$1
         local skipApp=$2 # to skip any code gen app files in dependencies
 
+        echo "Searching for deps in $searchPath"
         echo "skipApp: $skipApp"
         
         # Set default value for skipApp if not provided
