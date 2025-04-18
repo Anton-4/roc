@@ -52,7 +52,7 @@ let
             for appFile in $appFiles; do
               local appFullPath=$(realpath "$appFile")
               # Remove appFullPath from depsUrlsList
-              filesWithUrls=$(echo "$filesWithUrls" | grep -vxF "$appFullPath")
+              filesWithUrls=$(echo "$filesWithUrls" | grep -vxF "$appFullPath" || true)
             done
 
             if [ -n "$filesWithUrls" ]; then
