@@ -62,7 +62,7 @@ let
           local depsUrlsList=$(rg -o "$dependenciesRegexp" -IN  $searchPath)
         fi
 
-        depsUrlsList=$(uniq $depsUrlsList)
+        depsUrlsList=$(echo "$depsUrlsList" | tr ' ' '\n' | sort | uniq | tr '\n' ' ' | sed 's/ $//')
         echo "depsUrlsList: $depsUrlsList"
 
         if [ -z "$depsUrlsList" ]; then
