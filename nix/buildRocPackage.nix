@@ -17,7 +17,7 @@ let
     nativeBuildInputs = with pkgs; [ gnutar brotli ripgrep wget cacert ];
 
     buildPhase = ''
-      set -exo pipefail
+      set -x
 
       declare -A visitedUrls
 
