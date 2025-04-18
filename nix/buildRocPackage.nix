@@ -51,7 +51,6 @@ let
               # Remove appFullPath from depsUrlsList
               filesWithUrls=$(echo "$filesWithUrls" | grep -vxF "$appFullPath")
             done
-            # Optionally, trim trailing space
             depsUrlsList=$(rg -o '$dependenciesRegexp' -IN  $filesWithUrls)
             
             echo "depsUrlsList: $depsUrlsList"
@@ -63,8 +62,7 @@ let
         fi
 
         if [ -z "$depsUrlsList" ]; then
-          echo "Executed: $getDependenciesCommand"
-          echo "No URLs found in $searchPath"
+          echo "No dependency URLs need to be downloaded."
         fi
 
         for url in $depsUrlsList; do
