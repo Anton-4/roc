@@ -54,7 +54,12 @@ let
               # Remove appFullPath from depsUrlsList
               filesWithUrls=$(echo "$filesWithUrls" | grep -vxF "$appFullPath")
             done
-            local depsUrlsList=$(rg -o "$dependenciesRegexp" -IN  $filesWithUrls)
+
+            if [ -n "$filesWithUrls" ]; then
+              local depsUrlsList=$(rg -o "$dependenciesRegexp" -IN  $filesWithUrls)
+            else
+              return 0
+            fi
           else
             local depsUrlsList=$(rg -o "$dependenciesRegexp" -IN  $searchPath)
           fi
@@ -67,6 +72,7 @@ let
 
         if [ -z "$depsUrlsList" ]; then
           echo "No dependency URLs need to be downloaded."
+          return 0
         fi
 
         for url in $depsUrlsList; do
